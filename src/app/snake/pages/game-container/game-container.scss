@@ -1,0 +1,29 @@
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #121212; /* Mantém a mesma cor de fundo do menu */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.score-section {
+  width: 100%;
+  max-width: 600px; /* Limita a largura para ficar alinhado com o tabuleiro */
+  margin-bottom: 20px; /* Dá um respiro entre o placar e o tabuleiro */
+  display: flex;
+  justify-content: center;
+}
+
+.board-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1e1e1e; /* Fundo do tabuleiro um pouco mais claro que a tela */
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 4px solid #333333; /* Borda grossa simulando um fliperama */
+}
