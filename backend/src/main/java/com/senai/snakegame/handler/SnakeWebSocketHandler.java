@@ -1,32 +1,41 @@
 package com.senai.snakegame.handler;
 
-import org.springframework.context.annotation.Configuration;
+import com.senai.snakegame.enums.Direction;
+import com.senai.snakegame.service.GameManager;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.util.logging.SocketHandler;
-
-
 @Component
 public class SnakeWebSocketHandler extends TextWebSocketHandler {
-    @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        System.out.println("Jogador conectado ao jogo: " + session.getId());
-    }
 
-    // Quando o Angular enviar uma mensagem (Comando de direção da cobra)
-    @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String comandoDirecao = message.getPayload(); // Ex: "UP", "DOWN", "LEFT", "RIGHT"
-        String jsonSimulado = "{\"status\": \"playing\", \"score\": 10}";
-        session.sendMessage(new TextMessage(jsonSimulado));
-    }
+  private final GameManager gameManager;
 
-    // Se o jogador fechar o navegador ou der Game Over
-    @Override
-    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) throws Exception {
-        System.out.println("Jogador desconectado.");
+  // Injeção de dependência via construtor
+  public SnakeWebSocketHandler(GameManager gameManager) {
+    this.gameManager = gameManager;
+  }
+
+  @Override
+  public void afterConnectionEstablished(@NonNull WebSocketSession session) {
+    gameManager.addPlayer(session); // Avisa o manager que alguém chegou
+  }
+
+  @Override
+  protected void handleTextMessage(@NonNull WebSocketSession session, TextMessage message) {
+    try {
+      Direction directionCommand = Direction.valueOf(message.getPayload().toUpperCase());
+      gameManager.changePlayerDirection(session, directionCommand); // Avisa o manager da nova direção
+    } catch (IllegalArgumentException e) {
+      System.out.println("Comando inválido recebido do Angular: " + message.getPayload());
     }
+  }
+
+  @Override
+  public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
+    gameManager.removePlayer(session); // Avisa o manager para limpar a memória
+  }
 }
