@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-game-over',
-  imports: [],
   templateUrl: './game-over.html',
-  styleUrl: './game-over.scss',
+  styleUrls: ['./game-over.scss']
 })
-export class GameOver {}
+export class GameOverComponent {
+  @Input() finalScore: number = 0;
+  @Output() onRetry = new EventEmitter<void>();
+
+  public retry(): void {
+    this.onRetry.emit();
+  }
+}

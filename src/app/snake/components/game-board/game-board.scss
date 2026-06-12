@@ -1,0 +1,34 @@
+.grid-tabuleiro {
+  border: 4px solid #333;
+  background-color: #111;
+  display: inline-block;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  margin: 0 auto;
+
+  .linha {
+    display: flex;
+  }
+
+  .celula {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #1a1a1a; // Grade sutil do tabuleiro
+
+    &.vazia { 
+      background-color: #111; 
+    }
+    
+    &.cobra { 
+      background-color: #4CAF50; // Verde Arcade
+      box-shadow: 0 0 4px #4CAF50; // Efeito de brilho leve
+      border-radius: 4px; 
+    }
+    
+    &.comida { 
+      background-color: #F44336; // Vermelho Arcade
+      box-shadow: 0 0 4px #F44336;
+      border-radius: 50%; // Formato de frutinha
+    }
+  }
+}
