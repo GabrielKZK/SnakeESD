@@ -1,9 +1,17 @@
 <div class="game-wrapper">
   
   <div class="score-section">
-    </div>
+    <app-score-board [score]="snakeEngine.score" [highScore]="highScore"></app-score-board>
+  </div>
 
   <div class="board-section">
-    </div>
+    <app-game-board [matriz]="snakeEngine.board"></app-game-board>
+  </div>
+
+  <app-game-over 
+    *ngIf="snakeEngine.gameOver" 
+    [finalScore]="snakeEngine.score"
+    (onRetry)="reiniciarJogo()">
+  </app-game-over>
 
 </div>
