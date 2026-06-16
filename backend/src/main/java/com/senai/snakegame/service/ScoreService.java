@@ -14,9 +14,9 @@ public class ScoreService {
     ScoreRepository scoreRepository;
 
 
-    public List<Score> buscarMaioresPontuacoes() {
-        return scoreRepository.findTop10ByOrderByPoints();
-    }
+    public List<Score> buscarMaioresPontuacoes(){
+        return scoreRepository.findTop10ByOrderByPointsDesc();
+      }
 
     public Score salvar(ScoreDTO dto) {
         if (dto.getPoints() == null || dto.getPoints() < 0) {
