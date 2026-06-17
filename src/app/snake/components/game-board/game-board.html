@@ -4,9 +4,11 @@
          class="celula" 
          [ngClass]="{
            'vazia': celula === 0,
-           'cobra': celula === 1,
-           'comida': celula === 2
-         }">
+           'corpo': celula === 1,
+           'comida': celula === 2,
+           'cabeca': celula === 3
+         }"
+         [style.transform]="celula === 3 ? getHeadRotation() : 'none'">
     </div>
   </div>
 </div>

@@ -13,22 +13,36 @@
   .celula {
     width: 20px;
     height: 20px;
-    border: 1px solid #1a1a1a; // Grade sutil do tabuleiro
+    box-sizing: border-box; /* Garante que os 20px sejam exatos */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &.vazia { 
       background-color: #111; 
+      border: 1px solid #1a1a1a; 
     }
     
-    &.cobra { 
-      background-color: #4CAF50; // Verde Arcade
-      box-shadow: 0 0 4px #4CAF50; // Efeito de brilho leve
-      border-radius: 4px; 
+    &.corpo { 
+      background-color: #4CAF50; 
+      box-shadow: 0 0 4px #4CAF50; 
+      border-radius: 3px; /* Quadrado com cantinhos suaves */
+      border: 1px solid #388E3C; /* Borda leve para separar os quadrados do corpo */
+    }
+
+    &.cabeca {
+      background-color: transparent;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 20px solid #4CAF50; /* Desenha um triângulo verde apontando pra cima */
+      box-shadow: none; /* Tira sombra pra não bugar o CSS do triângulo */
     }
     
     &.comida { 
-      background-color: #F44336; // Vermelho Arcade
-      box-shadow: 0 0 4px #F44336;
-      border-radius: 50%; // Formato de frutinha
+      background-color: #F44336; 
+      box-shadow: 0 0 8px #F44336;
+      border-radius: 50%; /* 100% Redondo (Círculo) */
     }
   }
 }
