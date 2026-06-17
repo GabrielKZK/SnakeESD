@@ -1,29 +1,67 @@
-.game-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #121212; /* Mantém a mesma cor de fundo do menu */
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.score-section {
+.controls-section {
   width: 100%;
-  max-width: 600px; /* Limita a largura para ficar alinhado com o tabuleiro */
-  margin-bottom: 20px; /* Dá um respiro entre o placar e o tabuleiro */
+  max-width: 440px; /* Mesma largura do placar */
+  margin-bottom: 15px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
-.board-section {
+.btn-pause {
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: #555;
+    border-color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.pause-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #1e1e1e; /* Fundo do tabuleiro um pouco mais claro que a tela */
-  padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 4px solid #333333; /* Borda grossa simulando um fliperama */
+  z-index: 5;
+
+  h2 {
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 5px;
+    animation: blink 1.5s infinite;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.start-instruction {
+  color: #fff;
+  font-family: 'Courier New', Courier, monospace;
+  margin-bottom: 10px;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
