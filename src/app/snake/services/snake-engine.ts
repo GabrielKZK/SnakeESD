@@ -9,7 +9,10 @@ export class SnakeEngineService {
   snakeBody: Position[] = [];
   occupiedPositions: Set<string> = new Set();
   foodPosition: Position | null = null;
+  
   direction: Position = { x: 1, y: 0 };
+  nextDirection: Position = { x: 1, y: 0 }; // Trava para evitar colisão instantânea
+  
   gameOver = false;
   score = 0;
 
@@ -20,6 +23,7 @@ export class SnakeEngineService {
   resetGame() {
     this.snakeBody = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
     this.direction = { x: 1, y: 0 };
+    this.nextDirection = { x: 1, y: 0 };
     this.gameOver = false;
     this.score = 0;
     
@@ -50,11 +54,25 @@ export class SnakeEngineService {
     }
   }
 
+  setNextDirection(newDir: Position) {
+    // Impede a cobra de voltar pelo próprio pescoço (180 graus)
+    if (this.direction.x !== 0 && newDir.x !== 0) return;
+    if (this.direction.y !== 0 && newDir.y !== 0) return;
+    
+    this.nextDirection = newDir;
+  }
+
   moveSnake() {
     if (this.gameOver) return;
 
+    // Confirma a direção do turno atual
+    this.direction = { ...this.nextDirection };
+
     const head = this.snakeBody[0];
-    const newHead: Position = { x: head.x + this.direction.x, y: head.y + this.direction.y };
+    const newHead: Position = { 
+      x: head.x + this.direction.x, 
+      y: head.y + this.direction.y 
+    };
 
     if (this.checkCollision(newHead)) {
       this.gameOver = true;
@@ -71,6 +89,7 @@ export class SnakeEngineService {
       const tail = this.snakeBody.pop();
       if (tail) this.occupiedPositions.delete(`${tail.x},${tail.y}`);
     }
+    
     this.updateBoard();
   }
 
@@ -82,9 +101,20 @@ export class SnakeEngineService {
 
   updateBoard() {
     this.board = Array(this.boardSize).fill(0).map(() => Array(this.boardSize).fill(0));
-    for (let segment of this.snakeBody) {
-      this.board[segment.y][segment.x] = 1;
+    
+    // Pinta o corpo (1)
+    for (let i = 1; i < this.snakeBody.length; i++) {
+        const segment = this.snakeBody[i];
+        this.board[segment.y][segment.x] = 1; 
     }
+    
+    // Pinta a cabeça (3) para o HTML saber quem é quem
+    if (this.snakeBody.length > 0) {
+        const head = this.snakeBody[0];
+        this.board[head.y][head.x] = 3;
+    }
+
+    // Pinta a comida (2)
     if (this.foodPosition) {
       this.board[this.foodPosition.y][this.foodPosition.x] = 2;
     }

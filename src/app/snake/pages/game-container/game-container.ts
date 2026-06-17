@@ -33,11 +33,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   startGameLoop() {
     if (this.gameLoopSubscription) this.gameLoopSubscription.unsubscribe();
     
+    // Velocidade do jogo (120ms = fluido igual ao do Google)
     this.gameLoopSubscription = interval(120).subscribe(() => {
       if (!this.snakeEngine.gameOver) {
         this.snakeEngine.moveSnake();
       } else {
-        // Salva o recorde ao perder
         if (this.snakeEngine.score > this.highScore) {
           this.highScore = this.snakeEngine.score;
           localStorage.setItem('snakeHighScore', this.highScore.toString());
@@ -59,11 +59,20 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
       event.preventDefault(); 
     }
+    
     switch (event.key) {
-      case 'ArrowUp': if (this.snakeEngine.direction.y === 0) this.snakeEngine.direction = { x: 0, y: -1 }; break;
-      case 'ArrowDown': if (this.snakeEngine.direction.y === 0) this.snakeEngine.direction = { x: 0, y: 1 }; break;
-      case 'ArrowLeft': if (this.snakeEngine.direction.x === 0) this.snakeEngine.direction = { x: -1, y: 0 }; break;
-      case 'ArrowRight': if (this.snakeEngine.direction.x === 0) this.snakeEngine.direction = { x: 1, y: 0 }; break;
+      case 'ArrowUp': 
+        this.snakeEngine.setNextDirection({ x: 0, y: -1 }); 
+        break;
+      case 'ArrowDown': 
+        this.snakeEngine.setNextDirection({ x: 0, y: 1 }); 
+        break;
+      case 'ArrowLeft': 
+        this.snakeEngine.setNextDirection({ x: -1, y: 0 }); 
+        break;
+      case 'ArrowRight': 
+        this.snakeEngine.setNextDirection({ x: 1, y: 0 }); 
+        break;
     }
   }
 }

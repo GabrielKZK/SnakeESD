@@ -5,7 +5,10 @@
   </div>
 
   <div class="board-section">
-    <app-game-board [matriz]="snakeEngine.board"></app-game-board>
+    <app-game-board 
+      [matriz]="snakeEngine.board" 
+      [direction]="snakeEngine.direction">
+    </app-game-board>
   </div>
 
   <app-game-over 
