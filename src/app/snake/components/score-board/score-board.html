@@ -1,13 +1,10 @@
-<div class="grid-tabuleiro">
-  <div *ngFor="let linha of matriz" class="linha">
-    <div *ngFor="let celula of linha" 
-         class="celula" 
-         [ngClass]="{
-           'vazia': celula === 0,
-           'corpo': celula === 1,
-           'comida': celula === 2,
-           'cabeca': celula === 3
-         }">
-    </div>
+<div class="score-container">
+  <div class="score-box">
+    <span class="label">PONTOS</span>
+    <span class="value">{{ score }}</span>
+  </div>
+  <div class="score-box highlight">
+    <span class="label">RECORDE</span>
+    <span class="value">{{ highScore }}</span>
   </div>
 </div>
