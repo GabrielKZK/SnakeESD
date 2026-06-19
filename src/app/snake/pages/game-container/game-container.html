@@ -1,1 +1,27 @@
-<p>game-container works!</p>
+<div class="game-wrapper">
+  
+  <div class="score-section">
+    <app-score-board 
+      [score]="snakeEngine.score" 
+      [highScore]="highScore">
+    </app-score-board>
+  </div>
+
+  <div class="start-instruction" *ngIf="!snakeEngine.hasStarted && !snakeEngine.isGameOver">
+    Pressione qualquer SETA para começar
+  </div>
+
+  <div class="board-section">
+    <app-game-board 
+      [matriz]="snakeEngine.board" 
+      [direction]="snakeEngine.currentDirection">
+    </app-game-board>
+  </div>
+
+  <app-game-over 
+    *ngIf="snakeEngine.isGameOver" 
+    [finalScore]="snakeEngine.score"
+    (onRetry)="onRetry()">
+  </app-game-over>
+
+</div>

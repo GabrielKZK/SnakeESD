@@ -1,1 +1,14 @@
-<p>game-board works!</p>
+<div class="grid-tabuleiro">
+  <div *ngFor="let linha of matriz" class="linha">
+    <div *ngFor="let celula of linha" 
+         class="celula" 
+         [ngClass]="{
+           'vazia': celula === 0,
+           'corpo': celula === 1,
+           'comida': celula === 2,
+           'cabeca': celula === 3
+         }"
+         [style.transform]="celula === 3 ? getHeadRotation() : 'none'">
+    </div>
+  </div>
+</div>

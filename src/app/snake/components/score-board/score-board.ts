@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-score-board',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './score-board.html',
-  styleUrl: './score-board.scss',
+  styleUrls: ['./score-board.scss']
 })
-export class ScoreBoard {}
+export class ScoreBoardComponent {
+  @Input() score: number = 0;
+  @Input() highScore: number = 0;
+}
