@@ -6,7 +6,7 @@ import java.util.List;
 public class LeaderboardBST {
   private ScoreNode root;
 
-  public void insert(String sessionId, int score) {
+  public synchronized void insert(String sessionId, int score) {
     root = insertRec(root, sessionId, score);
   }
 
@@ -24,7 +24,7 @@ public class LeaderboardBST {
     return root;
   }
 
- // Lista os melhores pontuadores
+  // Lista os melhores pontuadores
   public List<String> getTopScores(int limit) {
     List<String> topScores = new ArrayList<>();
     reverseInOrder(root, topScores, limit);

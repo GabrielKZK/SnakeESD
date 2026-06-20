@@ -15,7 +15,7 @@ public class ScoreService {
 
 
     public List<Score> buscarMaioresPontuacoes(){
-        return scoreRepository.findTop10ByOrderByPointsDesc();
+        return scoreRepository.findTop10ByOrderByScoreDesc();
       }
 
     public Score salvar(ScoreDTO dto) {

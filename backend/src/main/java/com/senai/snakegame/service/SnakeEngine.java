@@ -3,21 +3,32 @@ package com.senai.snakegame.service;
 import com.senai.snakegame.enums.Direction;
 import com.senai.snakegame.dto.StateGameDTO;
 import com.senai.snakegame.model.Partes;
+
 import java.util.*;
 
-
 public class SnakeEngine {
+
+  // fase 1. Quanto menor o número, mais rápida a cobra. A cada fase
+  private static final int BASE_TICKS_PER_MOVE = 6;
+  private static final int MIN_TICKS_PER_MOVE = 2;
+
   private final int ROWS;
   private final int COLUMNS;
+  private final Random rand = new Random();
 
-  private Deque<Partes> snake; // Fila dupla para o corpo
-  private Set<Partes> snakeBodySet; // Set para busca O(1) de colisões
-  private int[][] board; // Matriz bidimensional
+  private Deque<Partes> snake;
+  private Set<Partes> snakeBodySet;
+  private int[][] board;
 
   private Partes food;
   private int score;
+  private int level;
   private boolean isGameOver;
+  private boolean isLevelUp;
   private volatile Direction currentDirection;
+
+  private int ticksPerMove;
+  private int tickCounter;
 
   public SnakeEngine(int rows, int columns) {
     this.ROWS = rows;
@@ -26,33 +37,52 @@ public class SnakeEngine {
   }
 
   public void startGame() {
-    snake = new LinkedList<>();
-    snakeBodySet = new HashSet<>();
     board = new int[ROWS][COLUMNS];
     score = 0;
+    level = 1;
     isGameOver = false;
-    currentDirection = Direction.RIGHT;
+    isLevelUp = false;
+    ticksPerMove = BASE_TICKS_PER_MOVE;
+    tickCounter = 0;
 
-    // Cobra nasce no meio (tamanho 3)
+    spawnSnake();
+    spawnFood();
+  }
+
+  // Recoloca a cobra no centro com o tamanho inicial (3). Usado tanto no
+  // começo do jogo quanto ao avançar de fase.
+  private void spawnSnake() {
+    snake = new LinkedList<>();
+    snakeBodySet = new HashSet<>();
     for (int i = 2; i >= 0; i--) {
       Partes p = new Partes(COLUMNS / 2 - i, ROWS / 2);
       snake.addFirst(p);
       snakeBodySet.add(p);
     }
-    spawnFood();
+    currentDirection = Direction.RIGHT;
   }
 
   private void spawnFood() {
-    Random rand = new Random();
-    Partes newFood;
+    // ANTES: quando a cobra preenchia o tabuleiro inteiro, isso marcava
+    // isGameOver = true (fim de jogo / "vitória"). AGORA: em vez de
+    // terminar, avança para a próxima fase, mantendo a pontuação.
     if (snakeBodySet.size() == ROWS * COLUMNS) {
-      isGameOver = true; // O jogador venceu!
+      advanceLevel();
       return;
     }
+    Partes newFood;
     do {
       newFood = new Partes(rand.nextInt(COLUMNS), rand.nextInt(ROWS));
-    } while (snakeBodySet.contains(newFood)); // Garante que a comida não caia dentro da cobra
+    } while (snakeBodySet.contains(newFood));
     this.food = newFood;
+  }
+
+  private void advanceLevel() {
+    level++;
+    isLevelUp = true; // flag de um único tick, consumida em getGameState()
+    spawnSnake();
+    ticksPerMove = Math.max(MIN_TICKS_PER_MOVE, BASE_TICKS_PER_MOVE - (level - 1));
+    spawnFood(); // agora o tabuleiro não está mais cheio, gera comida normalmente
   }
 
   public void changeDirection(Direction dir) {
@@ -61,8 +91,15 @@ public class SnakeEngine {
     }
   }
 
+
   public StateGameDTO processTick() {
     if (isGameOver) return getGameState();
+
+    tickCounter++;
+    if (tickCounter < ticksPerMove) {
+      return null;
+    }
+    tickCounter = 0;
 
     Partes head = snake.peekFirst();
     assert head != null;
@@ -78,28 +115,23 @@ public class SnakeEngine {
 
     Partes newHead = new Partes(newX, newY);
 
-    // Verifica Colisão com Paredes
     if (newX < 0 || newX >= COLUMNS || newY < 0 || newY >= ROWS) {
       isGameOver = true;
       return getGameState();
     }
 
-    // Verifica Colisão com o Próprio Corpo
     if (snakeBodySet.contains(newHead)) {
       isGameOver = true;
       return getGameState();
     }
 
-    // Move a cobra
     snake.addFirst(newHead);
     snakeBodySet.add(newHead);
 
-    // Verifica se comeu a comida
     if (newHead.equals(food)) {
       score += 10;
       spawnFood();
     } else {
-      // Se não comeu, remove o rabo da Fila (Deque)
       Partes tail = snake.removeLast();
       snakeBodySet.remove(tail);
     }
@@ -114,22 +146,27 @@ public class SnakeEngine {
       (currentDirection == Direction.RIGHT && dir == Direction.LEFT);
   }
 
-  // Monta a Matriz Bidimensional atualizada para enviar ao Angular
   private StateGameDTO getGameState() {
-    // Limpa a matriz: 0 = Vazio
-    for (int i = 0; i < ROWS; i++) {
-      for (int j = 0; j < COLUMNS; j++) {
-        board[i][j] = 0;
-      }
+    for (int[] row : board) {
+      Arrays.fill(row, 0);
     }
-    // Coloca a comida: 2 = Comida
+
     board[food.y()][food.x()] = 2;
 
-    // Coloca a cobra: 1 = Cobra
     for (Partes p : snake) {
       board[p.y()][p.x()] = 1;
     }
 
-    return new StateGameDTO(board, score, isGameOver);
+    // CORREÇÃO: a cabeça era marcada igual ao resto do corpo (1), então
+    // o triângulo de rotação no Angular (celula === 3) nunca aparecia.
+    // Agora a cabeça sobrescreve sua própria célula com o valor 3.
+    Partes head = snake.peekFirst();
+    if (head != null) {
+      board[head.y()][head.x()] = 3;
+    }
+
+    StateGameDTO state = new StateGameDTO(board, score, level, isLevelUp, isGameOver);
+    isLevelUp = false; // a flag só deve viajar "true" no tick exato da mudança de fase
+    return state;
   }
 }

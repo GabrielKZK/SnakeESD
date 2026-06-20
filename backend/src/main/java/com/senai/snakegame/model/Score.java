@@ -22,6 +22,9 @@ public class Score {
     @Column(nullable = false)
     private String playerName;
 
-    public Score(String playerName, Integer points) {
-    }
+  public Score(String playerName, Integer score) {
+    this.playerName = playerName;
+    this.score = score;
+  }
+
 }
