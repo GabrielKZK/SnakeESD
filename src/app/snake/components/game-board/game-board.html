@@ -1,11 +1,18 @@
 <div class="grid-tabuleiro">
-  <div *ngFor="let linha of matriz; let i = index; trackBy: trackByIndex" class="linha">
-    <div *ngFor="let celula of linha; let j = index; trackBy: trackByIndex" class="celula" [ngClass]="{
-           'vazia': celula === 0,
-           'corpo': celula === 1,
-           'comida': celula === 2,
-           'cabeca': celula === 3
-         }" [style.transform]="celula === 3 ? getHeadRotation() : 'none'">
+  
+  @for (row of board; track $index) {
+    <div class="linha">
+      
+      @for (cell of row; track $index) {
+        <div class="celula"
+             [class.vazia]="cell === 0"
+             [class.corpo]="cell === 1"
+             [class.comida]="cell === 2"
+             [class.cabeca]="cell === 3">
+        </div>
+      }
+      
     </div>
-  </div>
+  }
+
 </div>

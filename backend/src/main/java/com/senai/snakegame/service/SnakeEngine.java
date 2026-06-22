@@ -9,7 +9,7 @@ import java.util.*;
 public class SnakeEngine {
 
   // fase 1. Quanto menor o número, mais rápida a cobra. A cada fase
-  private static final int BASE_TICKS_PER_MOVE = 4;
+  private static final int BASE_TICKS_PER_MOVE = 2;
   private static final int MIN_TICKS_PER_MOVE = 1;
 
   private final int ROWS;

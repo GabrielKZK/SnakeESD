@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, NgZone } from '@angular/core';
 
 export interface GameState {
   matrix: number[][];
@@ -18,7 +18,7 @@ export class SnakeEngineService {
 
   private readonly wsUrl = 'ws://localhost:8080/game';
   private socket: WebSocket | null = null;
-  private pendingDirection: string | null = null; // Guarda a primeira tecla!
+  private pendingDirection: string | null = null; 
 
   public board: number[][] = [];
   public score = 0;
@@ -30,12 +30,16 @@ export class SnakeEngineService {
 
   public gameOverEvent = new EventEmitter<number>();
   public levelUpEvent = new EventEmitter<number>();
+  public stateUpdated = new EventEmitter<void>();
+
+  // Injetando o NgZone aqui no construtor
+  constructor(private ngZone: NgZone) {}
 
   resetGame(): void {
     this.closeSocket();
     const emptyBoard = Array.from({ length: 20 }, () => Array(20).fill(0));
     
-    // Cobra de enfeite neon
+    // Cobra neon de enfeite para a tela inicial
     emptyBoard[10][10] = 3; 
     emptyBoard[10][9] = 1;  
     emptyBoard[10][8] = 1;  
@@ -64,7 +68,6 @@ export class SnakeEngineService {
       case 'RIGHT': this.currentDirection = { x: 1, y: 0 }; break;
     }
 
-    // Se o socket ainda não abriu, guarda o comando para mandar depois
     if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
       this.pendingDirection = command;
       return;
@@ -76,17 +79,21 @@ export class SnakeEngineService {
   private connect(): void {
     this.socket = new WebSocket(this.wsUrl);
 
-    // MÁGICA AQUI: Quando conectar, manda o comando que ficou esperando
     this.socket.onopen = () => {
       if (this.pendingDirection) {
         this.socket?.send(this.pendingDirection);
         this.pendingDirection = null;
       } else {
-        this.socket?.send('RIGHT'); // Garante que o Java inicie
+        this.socket?.send('RIGHT'); 
       }
     };
 
-    this.socket.onmessage = (event: MessageEvent) => this.handleMessage(event);
+    // MÁGICA: NgZone obriga o Angular a desenhar a cobra na tela sozinho!
+    this.socket.onmessage = (event: MessageEvent) => {
+      this.ngZone.run(() => {
+        this.handleMessage(event);
+      });
+    };
 
     this.socket.onerror = (err) => console.error('Erro no WebSocket:', err);
     this.socket.onclose = () => { this.socket = null; };
@@ -99,7 +106,7 @@ export class SnakeEngineService {
       case 'STATE':
         const statePayload = msg.payload; 
         const state: GameState = {
-          matrix: statePayload.matrix || statePayload.board, // Funciona independente do nome no Java
+          matrix: statePayload.matrix || statePayload.board,
           score: statePayload.score,
           level: statePayload.level,         
           isLevelUp: statePayload.isLevelUp, 
@@ -115,7 +122,7 @@ export class SnakeEngineService {
   }
 
   private applyState(state: GameState): void {
-    if (!state.matrix) return; // Proteção contra pacotes vazios
+    if (!state.matrix) return; 
     
     this.board = state.matrix;
     this.score = state.score;
@@ -132,6 +139,7 @@ export class SnakeEngineService {
     } else {
       this.isGameOver = state.isGameOver;
     }
+    this.stateUpdated.emit();
   }
 
   private closeSocket(): void {

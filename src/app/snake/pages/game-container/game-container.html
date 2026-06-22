@@ -18,10 +18,7 @@
 
   <div class="board-and-leaderboard">
     <div class="board-section">
-      <app-game-board
-        [matriz]="snakeEngine.board"
-        [direction]="snakeEngine.currentDirection">
-      </app-game-board>
+      <app-game-board></app-game-board>
     </div>
 
     <app-leaderboard [entries]="snakeEngine.liveLeaderboard"></app-leaderboard>

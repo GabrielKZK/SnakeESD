@@ -1,27 +1,28 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, ChangeDetectorRef,OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SnakeEngineService } from '../../services/snake-engine';
 
 @Component({
   selector: 'app-game-board',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './game-board.html',
-  styleUrls: ['./game-board.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./game-board.scss']
 })
-export class GameBoardComponent {
-  @Input() matriz: number[][] = [];
-  @Input() direction: { x: number, y: number } = { x: 1, y: 0 };
+export class GameBoardComponent implements OnInit {
 
-  trackByIndex(index: number): number {
-    return index;
+  constructor(public engine: SnakeEngineService,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  ngOnInit(): void {
+    this.engine.stateUpdated.subscribe(() => {
+      this.cdr.detectChanges();
+    });
   }
 
-  // Função para girar a cabeça do triângulo dependendo de onde a cobra vai
-  getHeadRotation(): string {
-    if (this.direction.x === 1) return 'rotate(90deg)';   // Direita
-    if (this.direction.x === -1) return 'rotate(-90deg)'; // Esquerda
-    if (this.direction.y === 1) return 'rotate(180deg)';  // Baixo
-    return 'rotate(0deg)';                                // Cima
+  get board(): number[][] {
+    return this.engine.board;
   }
+
 }
