@@ -65,7 +65,7 @@ public class SnakeEngine {
   private void spawnFood() {
     // ANTES: quando a cobra preenchia o tabuleiro inteiro, isso marcava
     // isGameOver = true (fim de jogo / "vitória"). AGORA: em vez de
-    // terminar, avança para a próxima fase, mantendo a pontuação.
+    // terminar, avança para a próxima fase, mantendo a pontuação e ficando mais rápido na próxima fase.
     if (snakeBodySet.size() == ROWS * COLUMNS) {
       advanceLevel();
       return;
@@ -100,7 +100,7 @@ public class SnakeEngine {
       return null;
     }
     tickCounter = 0;
-
+    //Para que a cabeça não nasça dentro do corpo, assim ela não morre instantânemente.
     Partes head = snake.peekFirst();
     assert head != null;
     int newX = head.x();

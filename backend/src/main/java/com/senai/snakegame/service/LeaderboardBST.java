@@ -37,9 +37,7 @@ public class LeaderboardBST {
       return;
     }
 
-
     reverseInOrder(node.right, result, limit);
-
 
     if (result.size() < limit) {
       result.add("Jogador " + node.sessionId.substring(0, 4) + " - " + node.score + " pts");
