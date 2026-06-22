@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,11 +6,16 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './game-board.html',
-  styleUrls: ['./game-board.scss']
+  styleUrls: ['./game-board.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameBoardComponent {
   @Input() matriz: number[][] = [];
   @Input() direction: { x: number, y: number } = { x: 1, y: 0 };
+
+  trackByIndex(index: number): number {
+    return index;
+  }
 
   // Função para girar a cabeça do triângulo dependendo de onde a cobra vai
   getHeadRotation(): string {

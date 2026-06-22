@@ -1,36 +1,49 @@
 import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SnakeEngineService } from '../../services/snake-engine'; // Ajuste o caminho se necessário
+import { Subscription } from 'rxjs';
+import { SnakeEngineService } from '../../services/snake-engine';
 
-// Importe seus componentes visuais
 import { GameBoardComponent } from '../../components/game-board/game-board';
 import { ScoreBoardComponent } from '../../components/score-board/score-board';
 import { GameOverComponent } from '../../components/game-over/game-over';
+import { LeaderboardComponent } from '../../pages/leaderboard/leaderboard';
 
 @Component({
   selector: 'app-game-container',
   standalone: true,
-  imports: [CommonModule, GameBoardComponent, ScoreBoardComponent, GameOverComponent],
+  imports: [CommonModule, GameBoardComponent, ScoreBoardComponent, GameOverComponent, LeaderboardComponent],
   templateUrl: './game-container.html',
   styleUrls: ['./game-container.scss']
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
-  private intervalId: any;
-  
-  public highScore: number = 0;
-  private baseSpeed: number = 180; // Inicia um pouco mais devagar
-  private currentSpeed: number = 180;
-  private minimumSpeed: number = 60; // Limite máximo de velocidade (menor tempo)
 
-  constructor(public snakeEngine: SnakeEngineService) {}
+  public highScore = 0;
+  public levelUpBanner = false;
+
+  private subscriptions = new Subscription();
+
+  constructor(public snakeEngine: SnakeEngineService) { }
 
   ngOnInit(): void {
     this.loadHighScore();
     this.snakeEngine.resetGame();
+
+    // CORREÇÃO: antes o próprio Angular controlava setInterval/velocidade
+    // (startGameLoop, adjustSpeed). Agora quem decide quando a cobra se
+    // move é o backend (SnakeEngine.java + GameManager.java), então o
+    // componente só reage aos eventos que o service emite.
+    this.subscriptions.add(
+      this.snakeEngine.gameOverEvent.subscribe((finalScore) => this.saveHighScore(finalScore))
+    );
+
+    this.subscriptions.add(
+      this.snakeEngine.levelUpEvent.subscribe(() => this.showLevelUpBanner())
+    );
   }
 
   ngOnDestroy(): void {
-    this.clearGameLoop();
+    this.subscriptions.unsubscribe();
+    this.snakeEngine.resetGame(); // garante que o socket é fechado ao sair da tela
   }
 
   private loadHighScore(): void {
@@ -38,70 +51,53 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     this.highScore = savedScore ? parseInt(savedScore, 10) : 0;
   }
 
-  private saveHighScore(): void {
-    if (this.snakeEngine.score > this.highScore) {
-      this.highScore = this.snakeEngine.score;
+  private saveHighScore(finalScore: number): void {
+    if (finalScore > this.highScore) {
+      this.highScore = finalScore;
       localStorage.setItem('snakeHighScore', this.highScore.toString());
     }
   }
 
-  private startGameLoop(): void {
-    this.clearGameLoop();
-    this.intervalId = setInterval(() => {
-      if (this.snakeEngine.isGameOver) {
-        this.saveHighScore();
-        this.clearGameLoop();
-        return;
-      }
-
-      this.snakeEngine.moveSnake();
-      this.adjustSpeed();
-    }, this.currentSpeed);
-  }
-
-  private clearGameLoop(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-  }
-
-  private adjustSpeed(): void {
-    // Aumenta a velocidade (diminui o intervalo em ms) a cada 50 pontos
-    const speedReduction = Math.floor(this.snakeEngine.score / 50) * 15;
-    const newSpeed = Math.max(this.minimumSpeed, this.baseSpeed - speedReduction);
-
-    if (newSpeed !== this.currentSpeed) {
-      this.currentSpeed = newSpeed;
-      this.startGameLoop(); // Reinicia o intervalo com a nova velocidade
-    }
+  private showLevelUpBanner(): void {
+    this.levelUpBanner = true;
+    setTimeout(() => (this.levelUpBanner = false), 1800);
   }
 
   public onRetry(): void {
     this.snakeEngine.resetGame();
-    this.currentSpeed = this.baseSpeed;
-    // O loop só começa quando o jogador apertar uma tecla
+
   }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
-    const validKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-    
-    if (validKeys.includes(event.key)) {
-      event.preventDefault(); 
-      
-      // Inicia o jogo no primeiro clique válido
-      if (!this.snakeEngine.hasStarted && !this.snakeEngine.isGameOver) {
-        this.snakeEngine.startGame();
-        this.startGameLoop();
-      }
+    const key = event.key.toLowerCase();
+    const validKeys = ['arrowup', 'w', 'arrowdown', 's', 'arrowleft', 'a', 'arrowright', 'd'];
 
-      switch (event.key) {
-        case 'ArrowUp': this.snakeEngine.changeDirection({ x: 0, y: -1 }); break;
-        case 'ArrowDown': this.snakeEngine.changeDirection({ x: 0, y: 1 }); break;
-        case 'ArrowLeft': this.snakeEngine.changeDirection({ x: -1, y: 0 }); break;
-        case 'ArrowRight': this.snakeEngine.changeDirection({ x: 1, y: 0 }); break;
-      }
+    if (!validKeys.includes(key)) return;
+
+    event.preventDefault(); 
+
+    if (!this.snakeEngine.hasStarted && !this.snakeEngine.isGameOver) {
+      this.snakeEngine.startGame();
+    }
+
+    switch (key) {
+      case 'arrowup':
+      case 'w':
+        this.snakeEngine.changeDirection('UP');
+        break;
+      case 'arrowdown':
+      case 's':
+        this.snakeEngine.changeDirection('DOWN');
+        break;
+      case 'arrowleft':
+      case 'a':
+        this.snakeEngine.changeDirection('LEFT');
+        break;
+      case 'arrowright':
+      case 'd':
+        this.snakeEngine.changeDirection('RIGHT');
+        break;
     }
   }
 }

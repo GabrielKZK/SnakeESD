@@ -1,6 +1,6 @@
 package com.senai.snakegame.model;
 
-import com.senai.snakegame.dto.ScoreDTO;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -38,21 +38,28 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+
+    <!--
+      CORREÇÃO: as três dependências do Jackson 2.x (jackson-annotations,
+      jackson-core, jackson-databind) fixadas manualmente foram REMOVIDAS.
+      O Spring Boot 4.0.6 já gerencia o Jackson sozinho via BOM do
+      spring-boot-starter-parent (e nessa versão ele usa o Jackson 3,
+      pacote tools.jackson.*, incompatível com as versões 2.x fixadas
+      aqui). Deixar o parent escolher a versão evita esse tipo de
+      conflito de classpath.
+
+      A dependência abaixo é necessária porque o jackson-databind do
+      Jackson 3 (groupId mudou de com.fasterxml.jackson.core para
+      tools.jackson.core) é usado internamente pelo Spring em tempo de
+      execução, mas sem declará-lo aqui explicitamente o compilador não
+      enxerga a classe ObjectMapper para uso direto no nosso código
+      (GameManager.java). Sem <version>, a versão vem do BOM do parent.
+    -->
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>2.2.2</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>2.21.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
+      <groupId>tools.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.13.4.2</version>
     </dependency>
+
 
     <dependency>
       <groupId>org.springframework.boot</groupId>

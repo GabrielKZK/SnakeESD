@@ -1,6 +1,6 @@
 package com.senai.snakegame.dto;
 
-public record WsMessage<T>(String Type, T payload) {
+public record WsMessage<T>(String type, T payload) {
   public static <T> WsMessage<T> state(T payload) {
     return new WsMessage<>("STATE", payload);
   }

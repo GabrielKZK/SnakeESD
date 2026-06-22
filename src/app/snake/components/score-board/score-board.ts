@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,9 +6,11 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './score-board.html',
-  styleUrls: ['./score-board.scss']
+  styleUrls: ['./score-board.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScoreBoardComponent {
   @Input() score: number = 0;
   @Input() highScore: number = 0;
+  @Input() level: number = 1;
 }

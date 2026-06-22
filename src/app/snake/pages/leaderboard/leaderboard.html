@@ -1,0 +1,16 @@
+<div class="leaderboard-box">
+  <h2 class="leaderboard-title">RANKING AO VIVO</h2>
+
+  @if (entries.length > 0) {
+    <ol class="leaderboard-list">
+      @for (entry of entries; track $index) {
+        <li class="leaderboard-item">
+          <span class="position">{{ $index + 1 }}º</span>
+          <span class="entry-text">{{ entry }}</span>
+        </li>
+      }
+    </ol>
+  } @else {
+    <p class="leaderboard-empty">Nenhum jogador em partida no momento.</p>
+  }
+</div>
