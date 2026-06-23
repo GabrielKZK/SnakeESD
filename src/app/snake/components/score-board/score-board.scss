@@ -1,0 +1,46 @@
+.score-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  
+  
+  transform: scale(0.8); 
+  transform-origin: top center;
+}
+
+.score-box {
+  background: linear-gradient(145deg, #161625, #1d1d30);
+  border: 2px solid #2a2a40;
+  border-radius: 12px;
+  padding: 12px 30px;
+  text-align: center;
+  min-width: 140px;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+
+  &.highlight {
+    border-color: #00e5ff;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+    .label { color: #00e5ff; text-shadow: 0 0 5px #00e5ff; }
+  }
+
+  .label {
+    display: block;
+    color: #7a7a99;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+    font-weight: bold;
+  }
+
+  .value {
+    display: block;
+    color: #ffffff;
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
+  }
+}

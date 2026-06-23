@@ -1,0 +1,15 @@
+<div class="overlay">
+  <div class="modal-card">
+    <h1 class="titulo-gameover">FIM DE JOGO</h1>
+    
+    <p class="pontuacao-texto">
+      Você fez <span class="destaque">{{ finalScore }}</span> pontos!
+    </p>
+
+    <div class="botoes-container">
+      <button class="btn-primary" (click)="onRetry.emit()">
+        TENTAR NOVAMENTE
+      </button>
+    </div>
+  </div>
+</div>

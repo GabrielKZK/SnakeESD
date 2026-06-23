@@ -1,0 +1,33 @@
+<div class="game-wrapper">
+
+  <div class="score-section">
+    <app-score-board
+      [score]="snakeEngine.score"
+      [highScore]="highScore"
+      [level]="snakeEngine.level">
+    </app-score-board>
+  </div>
+
+  <div class="start-instruction" *ngIf="!snakeEngine.hasStarted && !snakeEngine.isGameOver">
+    Pressione qualquer SETA ou W/S/A/D para começar
+  </div>
+
+  <div class="level-up-banner" *ngIf="levelUpBanner">
+    FASE {{ snakeEngine.level }}!
+  </div>
+
+  <div class="board-and-leaderboard">
+    <div class="board-section">
+      <app-game-board></app-game-board>
+    </div>
+
+    <app-leaderboard [entries]="snakeEngine.liveLeaderboard"></app-leaderboard>
+  </div>
+
+  <app-game-over
+    *ngIf="snakeEngine.isGameOver"
+    [finalScore]="snakeEngine.score"
+    (onRetry)="onRetry()">
+  </app-game-over>
+
+</div>

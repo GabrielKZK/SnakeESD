@@ -1,0 +1,57 @@
+.menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #121212; /* Fundo bem escuro */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.menu-box {
+  text-align: center;
+  background-color: #1e1e1e;
+  padding: 4rem 5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  border: 2px solid #4CAF50; /* Borda verde neon */
+}
+
+.title {
+  font-size: 4rem;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+
+  span {
+    color: #4CAF50; /* Destaca a palavra SNAKE em verde */
+  }
+}
+
+.subtitle {
+  color: #aaaaaa;
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+}
+
+.btn-play {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 50px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    background-color: #45a049;
+    transform: scale(1.05); /* Dá uma leve crescida ao passar o mouse */
+  }
+
+  &:active {
+    transform: scale(0.95); /* Dá um efeito de "clique" apertando o botão */
+  }
+}

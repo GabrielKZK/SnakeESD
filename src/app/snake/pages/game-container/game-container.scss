@@ -1,0 +1,57 @@
+::ng-deep body {
+  margin: 0;
+  padding: 0;
+  overflow: auto; 
+  background-color: #08080f; 
+}
+
+.game-wrapper {
+  min-height: 100vh; 
+  box-sizing: border-box;
+ 
+  background-color: #08080f; 
+  background-image: 
+    radial-gradient(circle at 50% 0%, #15152a 0%, transparent 50%),
+    linear-gradient(0deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px; 
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.start-instruction {
+  margin: 0px 0 15px; 
+  font-size: 1.4rem;
+  color: #00e5ff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+  animation: piscar 1.2s infinite;
+}
+
+@keyframes piscar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; text-shadow: none; }
+}
+
+.board-and-leaderboard {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.board-section {
+  grid-column: 2;
+  position: relative;
+}
+
+app-leaderboard {
+  grid-column: 3;
+  margin-left: 40px;
+  justify-self: start;
+}

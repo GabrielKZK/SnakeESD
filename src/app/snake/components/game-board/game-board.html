@@ -1,0 +1,18 @@
+<div class="grid-tabuleiro">
+  
+  @for (row of board; track $index) {
+    <div class="linha">
+      
+      @for (cell of row; track $index) {
+        <div class="celula"
+             [class.vazia]="cell === 0"
+             [class.corpo]="cell === 1"
+             [class.comida]="cell === 2"
+             [class.cabeca]="cell === 3">
+        </div>
+      }
+      
+    </div>
+  }
+
+</div>
