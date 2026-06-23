@@ -1,5 +1,4 @@
 <div class="leaderboard-box">
-<<<<<<< HEAD
   <h3 class="leaderboard-title">🎮 Controles</h3>
 
   <ul class="leaderboard-list">
@@ -24,20 +23,4 @@
   <div class="game-tips">
     Coma as maçãs para crescer.<br>Não bata nas paredes nem no próprio corpo!
   </div>
-=======
-  <h2 class="leaderboard-title">RANKING AO VIVO</h2>
-
-  @if (entries.length > 0) {
-    <ol class="leaderboard-list">
-      @for (entry of entries; track $index) {
-        <li class="leaderboard-item">
-          <span class="position">{{ $index + 1 }}º</span>
-          <span class="entry-text">{{ entry }}</span>
-        </li>
-      }
-    </ol>
-  } @else {
-    <p class="leaderboard-empty">Nenhum jogador em partida no momento.</p>
-  }
->>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
 </div>

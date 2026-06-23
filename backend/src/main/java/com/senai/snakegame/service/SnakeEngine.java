@@ -49,11 +49,6 @@ public class SnakeEngine {
     spawnFood();
   }
 
-<<<<<<< HEAD
-=======
-  // Recoloca a cobra no centro com o tamanho inicial (3). Usado tanto no
-  // começo do jogo quanto ao avançar de fase.
->>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
   private void spawnSnake() {
     snake = new LinkedList<>();
     snakeBodySet = new HashSet<>();
@@ -66,12 +61,6 @@ public class SnakeEngine {
   }
 
   private void spawnFood() {
-<<<<<<< HEAD
-=======
-    // ANTES: quando a cobra preenchia o tabuleiro inteiro, isso marcava
-    // isGameOver = true (fim de jogo / "vitória"). AGORA: em vez de
-    // terminar, avança para a próxima fase, mantendo a pontuação e ficando mais rápido na próxima fase.
->>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
     if (snakeBodySet.size() == ROWS * COLUMNS) {
       advanceLevel();
       return;
@@ -85,17 +74,10 @@ public class SnakeEngine {
 
   private void advanceLevel() {
     level++;
-<<<<<<< HEAD
     isLevelUp = true; 
     spawnSnake();
     ticksPerMove = Math.max(MIN_TICKS_PER_MOVE, BASE_TICKS_PER_MOVE - (level - 1));
     spawnFood(); 
-=======
-    isLevelUp = true; // flag de um único tick, consumida em getGameState()
-    spawnSnake();
-    ticksPerMove = Math.max(MIN_TICKS_PER_MOVE, BASE_TICKS_PER_MOVE - (level - 1));
-    spawnFood(); // agora o tabuleiro não está mais cheio, gera comida normalmente
->>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
   }
 
   public void changeDirection(Direction dir) {
@@ -170,23 +152,13 @@ public class SnakeEngine {
       board[p.y()][p.x()] = 1;
     }
 
-<<<<<<< HEAD
-=======
-    // CORREÇÃO: a cabeça era marcada igual ao resto do corpo (1), então
-    // o triângulo de rotação no Angular (celula === 3) nunca aparecia.
-    // Agora a cabeça sobrescreve sua própria célula com o valor 3.
->>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
     Partes head = snake.peekFirst();
     if (head != null) {
       board[head.y()][head.x()] = 3;
     }
 
     StateGameDTO state = new StateGameDTO(board, score, level, isLevelUp, isGameOver);
-<<<<<<< HEAD
     isLevelUp = false; 
-=======
-    isLevelUp = false; // a flag só deve viajar "true" no tick exato da mudança de fase
->>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
     return state;
   }
 }
