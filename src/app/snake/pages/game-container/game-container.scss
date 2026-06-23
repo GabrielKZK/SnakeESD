@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ::ng-deep body {
   margin: 0;
   padding: 0;
@@ -9,6 +10,10 @@
   min-height: 100vh; 
   box-sizing: border-box;
  
+=======
+.game-wrapper {
+  min-height: 100vh;
+>>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
   background-color: #08080f; 
   background-image: 
     radial-gradient(circle at 50% 0%, #15152a 0%, transparent 50%),
@@ -18,12 +23,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+<<<<<<< HEAD
   padding-top: 20px; 
+=======
+  padding-top: 40px;
+>>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
   font-family: 'Courier New', Courier, monospace;
 }
 
 .start-instruction {
+<<<<<<< HEAD
   margin: 0px 0 15px; 
+=======
+  margin: 10px 0 30px;
+>>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
   font-size: 1.4rem;
   color: #00e5ff;
   letter-spacing: 3px;

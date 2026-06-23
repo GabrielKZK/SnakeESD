@@ -24,8 +24,12 @@
 
 .leaderboard-list {
   list-style: none;
+<<<<<<< HEAD
   padding: 0; 
   margin: 0;
+=======
+  padding: 0; margin: 0;
+>>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
 }
 
 .leaderboard-item {
@@ -56,6 +60,7 @@
   }
 }
 
+<<<<<<< HEAD
 /* Nova classe exclusiva para as dicas do jogo */
 .game-tips {
   margin-top: 20px;
@@ -65,4 +70,11 @@
   text-align: center;
   font-size: 0.85rem;
   line-height: 1.5;
+=======
+.leaderboard-empty {
+  color: #666;
+  text-align: center;
+  font-style: italic;
+  font-size: 0.9rem;
+>>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
 }

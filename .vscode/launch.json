@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "configurations": [
     {
+<<<<<<< HEAD
       "type": "java",
       "name": "SnakegameApplication",
       "request": "launch",
@@ -10,6 +11,8 @@
       "projectName": "SnakeESD"
     },
     {
+=======
+>>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",

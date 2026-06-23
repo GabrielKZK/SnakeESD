@@ -3,7 +3,11 @@
   background-color: #0f0f1b; 
   display: inline-block;
   border-radius: 8px;
+<<<<<<< HEAD
   box-shadow: 0 0 30px rgba(0, 229, 255, 0.15); 
+=======
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.15); /* Brilho em volta do tabuleiro */
+>>>>>>> 4dc9e723c7610734083ffbc037c08f5f137d542c
   margin: 0 auto;
 
   .linha { display: flex; }
